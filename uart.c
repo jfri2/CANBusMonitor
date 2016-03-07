@@ -23,21 +23,19 @@
 #include "gpio.h"
 
 void uart_init(uint16_t baudRate) {
-	/* Local Variables */
-	uint16_t baudDivider;
-		
 	/* set uart no parity, 8 data bits, 1 stop bit */
 	/* enable lin/uart */
 	/* UART Rx and Tx Byte Enable */
 	LINCR = 0b00001111;
-	
+		
 	/* Enable error, transmit performed, recieve performed interrupts */
 	//LINENIR |= (1<<LENERR)|(1<<LENTXOK)|(1<<LENRXOK);
 		
 	/* set baud rate in LINBRR register */	
 	/* baud rate is scaled clk / value */
-	baudDivider = F_CPU / baudRate;
-	LINBRR = baudDivider;
+	//baudDivider = (uint16_t)((F_CPU / ((LINBTR & 0b00011111) * baudRate )) - 1);
+	LINBRRH = (((F_CPU/baudRate)/32)-1)>>8;
+	LINBRRL = (((F_CPU/baudRate)/32)-1);
 }
 
 uint8_t checkUartErrorRegister(void) {
@@ -56,9 +54,9 @@ uint8_t checkUartErrorRegister(void) {
 	return LINERR;
 }
 
-void uartSendByte(char *data) {
+void uartSendByte(char data) {
 	while((LINSIR & (1<<LBUSY)) != 0);	// wait until uart is not busy
-	LINDAT = *data;	// put data into register to be sent out
+	LINDAT = data;	// put data into register to be sent out
 }
 
 uint8_t uartGetByte(void) {

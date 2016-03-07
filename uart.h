@@ -21,7 +21,7 @@
  *  the character is a carriage return ('\r'), the cursor
  *  should be immediately reset to the beginning of the current
  *  line, causing any future output to overwrite any existing
- *  output on the line.  If backsapce ('\b') is encountered,
+ *  output on the line.  If backspace ('\b') is encountered,
  *  the previous character should be erased (write a space
  *  over it and move the cursor back one column).  It is up
  *  to you how you want to handle a backspace occurring at the
@@ -34,7 +34,7 @@ void uart_init(uint16_t);
 
 uint8_t checkUartErrorRegister(void);
 
-void uartSendByte(char*);
+void uartSendByte(char);
 
 uint8_t uartGetByte(void);
 

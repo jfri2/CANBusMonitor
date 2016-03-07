@@ -14,6 +14,7 @@
 /* Global Variables */
 uint16_t LEDBlinkCount = 0; //keeps track of Timer0 overflows
 timeStruct systemTime;
+char sendThisByte;
 
 /* ISRs */
 ISR(TIMER0_OVF_vect) {
@@ -48,6 +49,8 @@ int main(void) {
 	systemTime.minutes = 0;
 	systemTime.hours = 0;
 	systemTime.days = 0;
+	
+	sendThisByte = 0x51;
 		
     /* initialize timers and gpio */
 	timer0_init();
@@ -59,14 +62,14 @@ int main(void) {
 		
     while(1) {
 		/* send one byte continuously over the UART */
-		uartSendByte("Q");
-		
+
 		/* blink the LED on PORTC7 once per second */
 		if(LEDBlinkCount >= LED_DELAY_OVF) {
 			TGL_BIT(STATUS_LED, STATUS_LED_REG);
 			LEDBlinkCount = 0;
+			uartSendByte(sendThisByte);
 		}
-		
+				
 	}
     return 0;
 }
