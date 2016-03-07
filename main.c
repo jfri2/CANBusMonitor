@@ -67,7 +67,7 @@ int main(void) {
 		if(LEDBlinkCount >= LED_DELAY_OVF) {
 			TGL_BIT(STATUS_LED, STATUS_LED_REG);
 			LEDBlinkCount = 0;
-			uartSendByte(sendThisByte);
+			printf("\nCurrent System Time: HH:MM:SS is: %2u:%2u:%2u", systemTime.hours, systemTime.minutes, systemTime.seconds);
 		}
 				
 	}
