@@ -13,13 +13,14 @@
 
 /* Global Variables */
 uint16_t LEDBlinkCount = 0; //keeps track of Timer0 overflows
+uint16_t LogBlinkCount = 0;
 timeStruct systemTime;
-char sendThisByte;
 
 /* ISRs */
 ISR(TIMER0_OVF_vect) {
 	/* Update LED Flash Counter */
 	LEDBlinkCount++;
+	LogBlinkCount++;
 	
 	/* Update System Time */
 	systemTime.counter++;	
@@ -42,7 +43,38 @@ ISR(TIMER0_OVF_vect) {
 }
 
 /* main */
-int main(void) {
+int main(void) {			
+    /* initialize timers, gpio, uart, system */
+	timer0_init();
+    gpio_init();	
+	uart_init(BAUD_RATE);
+	system_init();
+
+	/* enable global interrupts */
+	sei();
+		
+    while(1) {
+
+		/* blink the LED on PORTC7 once per second, display sys time */
+		if(LEDBlinkCount >= LED_DELAY_OVF) {
+			LEDBlinkCount = 0;
+			TGL_BIT(STATUS_LED, STATUS_LED_REG);
+		}
+		if(LogBlinkCount >= DELAY_1SEC_OVF) {
+			LogBlinkCount = 0;
+			logEvent("");
+		}
+	}
+    return 0;
+}
+
+void logEvent(char *str) {
+	//uartSendByte(13); //ascii carrige return
+	printf("\n%02u:%02u:%02u ", systemTime.hours, systemTime.minutes, systemTime.seconds);
+	printf(str);	
+}
+
+void system_init(void) {
 	/* initialize system time to zero */
 	systemTime.counter = 0;
 	systemTime.seconds = 0;
@@ -50,26 +82,9 @@ int main(void) {
 	systemTime.hours = 0;
 	systemTime.days = 0;
 	
-	sendThisByte = 0x51;
-		
-    /* initialize timers and gpio */
-	timer0_init();
-    gpio_init();	
-	uart_init(BAUD_RATE);
-
-	/* enable global interrupts */
-	sei();
-		
-    while(1) {
-		/* send one byte continuously over the UART */
-
-		/* blink the LED on PORTC7 once per second */
-		if(LEDBlinkCount >= LED_DELAY_OVF) {
-			TGL_BIT(STATUS_LED, STATUS_LED_REG);
-			LEDBlinkCount = 0;
-			printf("\nCurrent System Time: HH:MM:SS is: %2u:%2u:%2u", systemTime.hours, systemTime.minutes, systemTime.seconds);
-		}
-				
-	}
-    return 0;
+	printf("\n");
+	printf("\n===============================================");
+	printf("\n=============== CAN BUS MONITOR ===============");
+	printf("\n===============================================");
+	logEvent("System initialized");
 }

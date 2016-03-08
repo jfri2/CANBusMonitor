@@ -35,4 +35,9 @@ typedef struct {
 	uint16_t days;
 } timeStruct;
 
+/* Function Prototypes */
+void system_init(void);
+
+void logEvent(char *str);
+
 #endif /* _CANBUSMonitor_H */

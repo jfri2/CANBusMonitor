@@ -9,7 +9,7 @@
  *  should go in these comments.
  *
  *  @author John Fritz
- *  @bug printf doesn't printf.
+ *  @bug No known bugs.
  *
  *  LINDAT register is uart data register.
  *  LINCR register is lin/uart control register
