@@ -31,10 +31,9 @@ int main(void) {
     gpio_init();	
 	uart_init(UART_BAUD_RATE);
 	system_init();
+	sei();
 	logEvent("Beginning CAN initialization...");
-	checkCANInitError(can_init(CAN_BAUD_RATE_KHz, CAN_TQ_NS));
-	sei();	// enable global interrupts
-	logEvent("System initialized");
+	checkCANInit(can_init(CAN_BAUD_RATE_KHz, CAN_TQ_NS));
 	
 	/************** System Loop **************/	
     while(1) {				

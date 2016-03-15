@@ -26,6 +26,6 @@
 
 /* Function Prototypes */
 uint8_t can_init(uint16_t, uint16_t);
-void checkCANInitError(uint8_t);
+void checkCANInit(uint8_t);
 
 #endif /* _CAN_H */

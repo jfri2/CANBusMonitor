@@ -9,13 +9,12 @@
  *  @bug Not finished.
  */
 
-#ifndef _GPIO_H
-#define _GPIO_H
+#ifndef _GPIO_C
+#define _GPIO_C
 #include "gpio.h"
 
 void gpio_init(void) {
   DDRC = 0xFF;
   PORTC = 0x00;
 }
-
 #endif

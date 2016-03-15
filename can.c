@@ -108,49 +108,50 @@ uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 	return(errorCode);
 }
 
-void checkCANInitError(uint8_t errorCode) {
+void checkCANInit(uint8_t errorCode) {
 	switch(errorCode) {
 		case 0:
-			/* Do nothing if no error */
+			logEvent("CAN initialized");
+			printf(" to %u kHz baud, TQ of %u nsec", CAN_BAUD_RATE_KHz, CAN_TQ_NS);
 		break;
 		
 		case 1:
-			logEvent("ERROR: tq_ns not correctly defined for 1M CAN bus baud rate");
-			printf(" expected 125");
+			logEvent("ERROR: tq_ns not correctly defined for 1M CAN bus baud rate.");
+			printf(" Expected 125.");
 		break;
 		
 		case 2:
-			logEvent("ERROR: tq_ns not correctly defined for 500k CAN bus baud rate");
-			printf(" expected 125 or 250");
+			logEvent("ERROR: tq_ns not correctly defined for 500k CAN bus baud rate.");
+			printf(" Expected 125 or 250.");
 		break;
 		
 		case 3:
-			logEvent("ERROR: tq_ns not correctly defined for 250k CAN bus baud rate");
-			printf(" expected 250 or 500");
+			logEvent("ERROR: tq_ns not correctly defined for 250k CAN bus baud rate.");
+			printf(" Expected 250 or 500.");
 		break;
 		
 		case 4: 
-			logEvent("ERROR: tq_ns not correctly defined for 200k CAN bus baud rate");
-			printf( "expected 250 or 625");
+			logEvent("ERROR: tq_ns not correctly defined for 200k CAN bus baud rate.");
+			printf(" Expected 250 or 625.");
 		break;
 		
 		case 5:
-			logEvent("ERROR: tq_ns not correctly defined for 125k CAN bus baud rate");
-			printf( "expected 500 or 1000");
+			logEvent("ERROR: tq_ns not correctly defined for 125k CAN bus baud rate.");
+			printf(" Expected 500 or 1000.");
 		break;
 		
 		case 6:
-			logEvent("ERROR: tq_ns not correctly defined for 100k CAN bus baud rate");
-			printf( "expected 625 or 1250");
+			logEvent("ERROR: tq_ns not correctly defined for 100k CAN bus baud rate.");
+			printf(" Expected 625 or 1250.");
 		break;	
 		
 		case 0xFF:
-			logEvent("ERROR: CAN bus baud rate incorrectly defined");
-			printf(" expected 1000, 500, 250, 200, 125, 100");
+			logEvent("ERROR: CAN bus baud rate incorrectly defined.");
+			printf(" Expected 1000, 500, 250, 200, 125, 100.");
 		break;
 		
 		default:
-			logEvent("ERROR: Unknown CAN initialization error");
+			logEvent("ERROR: Unknown CAN initialization error.");
 		break;			
 	}
 }
