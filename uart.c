@@ -17,7 +17,7 @@
  *  LINENIR register is LIN enable interrupt register
  *  LINERR register is LIN error register
  *  LINBTR is LIN bit timing register
- *  LINBRR is lin baud rate regiseter
+ *  LINBRR is lin baud rate register
  */
 #ifndef _UART_C
 #define _UART_C
@@ -33,7 +33,7 @@ void uart_init(uint16_t baudRate) {
 	/* UART Rx and Tx Byte Enable */
 	LINCR = 0b00001111;
 		
-	/* Enable error, transmit performed, recieve performed interrupts */
+	/* Enable error, transmit performed, receive performed interrupts */
 	//LINENIR |= (1<<LENERR)|(1<<LENTXOK)|(1<<LENRXOK);
 		
 	/* set baud rate in LINBRR register */	
