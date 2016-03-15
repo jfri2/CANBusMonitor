@@ -1,4 +1,4 @@
-/** @file CANBusMonitor.h
+/** @file config.h
  *  @brief Function prototypes for the console driver.
  *
  *  This contains the prototypes for the console
