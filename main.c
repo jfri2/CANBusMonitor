@@ -8,7 +8,7 @@
  *  @bug Not Finished
  */
 
-/* TODO:: 
+/* TODO:: DONE 3_14_2016_9:00PM CST
  * Use #defines and #ifdef's to check for error logging functionality 
  * (currently implemented throughout main, can.c, and uart.c).
  * Think about separating these files into separate source and header
