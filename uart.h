@@ -9,10 +9,10 @@
  *  @bug No known bugs.
  */
 
-#include <stdio.h>
-
 #ifndef _UART_H
 #define _UART_H
+
+#include <stdio.h>
 
 /** @brief Prints character ch at the current location
  *         of the cursor.
@@ -30,8 +30,8 @@ void uartSendByte(uint8_t);
 
 uint8_t uartGetByte(void);
 
-void uartSendByteStream(char, FILE *stream);
+void uartSendByteStream(uint8_t, FILE *stream);
 
-char uartGetByteStream(FILE *stream);
+uint8_t uartGetByteStream(FILE *stream);
 
 #endif /* _UART_H */

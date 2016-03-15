@@ -19,8 +19,11 @@
  *  LINBTR is LIN bit timing register
  *  LINBRR is lin baud rate regiseter
  */
+#ifndef _UART_C
+#define _UART_C
+
 #include "uart.h"
-#include "gpio.h"
+#include "gpio.c"
 
 static FILE avrStdOut = FDEV_SETUP_STREAM(uartSendByteStream, uartGetByteStream, _FDEV_SETUP_RW);
 
@@ -69,12 +72,14 @@ uint8_t uartGetByte(void) {
 	return(LINDAT);	// return data from LINDAT register
 }
 
-void uartSendByteStream(char data, FILE *stream) {
+void uartSendByteStream(uint8_t data, FILE *stream) {
 	while((LINSIR & (1<<LBUSY)) != 0);	// wait until uart is not busy
 	LINDAT = data;	// put data into register to be sent out
 }
 
-char uartGetByteStream(FILE *stream) {
+uint8_t uartGetByteStream(FILE *stream) {
 	while((LINSIR & (1<<LBUSY)) != 0);	// wait until uart is not busy
-	return(LINDAT);	// return data from LINDAT register	
+	return(LINDAT);	// return data from LINDAT register	s
 }
+
+#endif

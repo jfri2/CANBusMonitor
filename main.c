@@ -5,73 +5,48 @@
  *  function.
  *
  *  @author John Fritz
- *  @bug No known bugs.
+ *  @bug Not Finished
+ */
+
+/* TODO:: 
+ * Use #defines and #ifdef's to check for error logging functionality 
+ * (currently implemented throughout main, can.c, and uart.c).
+ * Think about separating these files into separate source and header
+ * files that can be included and used with a simple #define in main.
  */
 
 /* -- Includes -- */
-#include "CANBusMonitor.h"
+#include "config.h"
 
-/* Global Variables */
-uint16_t LEDBlinkCount = 0; //keeps track of Timer0 overflows
-uint16_t LogBlinkCount = 0;
-timeStruct systemTime;
+/* -- Global Variables -- */
+uint8_t adcVoltage = 0;
 
-/* ISRs */
-ISR(TIMER0_OVF_vect) {
-	/* Update LED Flash Counter */
-	LEDBlinkCount++;
-	LogBlinkCount++;
-	
-	/* Update System Time */
-	systemTime.counter++;	
-	if(systemTime.counter >= DELAY_1SEC_OVF) {
-		systemTime.seconds++;
-		systemTime.counter = 0;
-		if(systemTime.seconds >= 60) {
-			systemTime.minutes++;
-			systemTime.seconds = 0;
-			if(systemTime.minutes >= 60) {
-				systemTime.hours++;
-				systemTime.minutes = 0;
-				if(systemTime.hours >= 24) {
-					systemTime.days++;
-					systemTime.hours = 0;
-				}
-			}
-		}
-	}
-}
+/* -- ISRs -- */
+/* Timer0 overflow ISR now defined in event_logger.h */
 
-/* main */
+/* -- main -- */
 int main(void) {			
-    /* initialize timers, gpio, uart, system */
+    /********** System Initilization **********/
 	timer0_init();
     gpio_init();	
-	uart_init(BAUD_RATE);
+	uart_init(UART_BAUD_RATE);
 	system_init();
-
-	/* enable global interrupts */
-	sei();
-		
-    while(1) {
-
-		/* blink the LED on PORTC7 once per second, display sys time */
+	logEvent("Beginning CAN initialization...");
+	checkCANInitError(can_init(CAN_BAUD_RATE_KHz, CAN_TQ_NS));
+	sei();	// enable global interrupts
+	logEvent("System initialized");
+	
+	/************** System Loop **************/	
+    while(1) {				
+		/* blink the LED on PORTC7 once per second */
+		#ifdef STATUS_LED_ACTIVE
 		if(LEDBlinkCount >= LED_DELAY_OVF) {
 			LEDBlinkCount = 0;
 			TGL_BIT(STATUS_LED, STATUS_LED_REG);
 		}
-		if(LogBlinkCount >= DELAY_1SEC_OVF) {
-			LogBlinkCount = 0;
-			logEvent("");
-		}
+		#endif		
 	}
     return 0;
-}
-
-void logEvent(char *str) {
-	//uartSendByte(13); //ascii carrige return
-	printf("\n%02u:%02u:%02u ", systemTime.hours, systemTime.minutes, systemTime.seconds);
-	printf(str);	
 }
 
 void system_init(void) {
@@ -86,5 +61,4 @@ void system_init(void) {
 	printf("\n===============================================");
 	printf("\n=============== CAN BUS MONITOR ===============");
 	printf("\n===============================================");
-	logEvent("System initialized");
 }

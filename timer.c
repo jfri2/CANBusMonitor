@@ -8,6 +8,7 @@
  * Available for both read and write operations. 
  */
 #include "timer.h"
+#include "gpio.h"
 
 #if PRESCALE != 1
 #error "Timer0 Prescalar currently set at 1 in timer0_init"
