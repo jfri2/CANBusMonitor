@@ -9,7 +9,7 @@
 //!
 //! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
 //!
-//! @todo	Lots
+//! @todo	Add function def doc, more other doc, add more fns if necessary
 //! @bug
 //******************************************************************************
 
@@ -29,7 +29,7 @@
 #define TIMER0_PRESCALE			1		// Timer0 prescalar
 #define UART_BAUD_RATE			9600	// UART baud rate in Hz
 #define CAN_BAUD_RATE_KHz		100		// CAN baud rate in kHz
-#define CAN_TQ_NS				625		// CAN propagation delay time in nanoseconds
+#define CAN_TQ_NS				625		// CAN Time Quantum in nanoseconds. Smallest discrete timing resolution used by a CAN node
 
 #include <stdint.h>
 #include <avr/io.h>

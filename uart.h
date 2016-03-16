@@ -9,7 +9,7 @@
 //!
 //! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
 //!
-//! @todo	Lots
+//! @todo	Add function prototype documentation. Add more functions if necessary
 //! @bug
 //******************************************************************************
 
@@ -21,14 +21,6 @@
 #ifndef UART_BAUD_RATE
 #warning "UART_BAUD_RATE not defined in config.h"
 #endif
-
-/** @brief Prints character ch at the current location
- *         of the cursor.
- *
- *
- *  @param ch the character to print
- *  @return The input character
- */
 
 void uart_init(uint16_t);
 

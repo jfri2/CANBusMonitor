@@ -10,7 +10,7 @@
 //!
 //! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
 //!
-//! @todo	Lots
+//! @todo	Add function def doc, more other doc, add more fns if necessary
 //! @bug
 //******************************************************************************
 #ifndef _CAN_H
