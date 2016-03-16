@@ -1,3 +1,18 @@
+//******************************************************************************
+//! @file $RCSfile: event_logger.c,v $
+//!
+//! Please read file license.txt for copyright notice.
+//!
+//! @brief This file contains the function definitions for the event logger
+//!
+//! This file can be parsed by Doxygen for automatic documentation generation.
+//!
+//! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
+//!
+//! @todo	Lots
+//! @bug
+//******************************************************************************
+
 #include "event_logger.h"
 #include "uart.c"
 
@@ -14,6 +29,8 @@ ISR(TIMER0_OVF_vect) {
 	#ifdef STATUS_LED_ACTIVE
 	/* Update LED Flash Counter */
 	LEDBlinkCount++;
+	#else
+	#pragma message("Status LED is not active")
 	#endif
 	
 	/* Update System Time */
@@ -35,4 +52,6 @@ ISR(TIMER0_OVF_vect) {
 		}
 	}
 }
+#else
+#pragma message("System time on timer0 not active")
 #endif

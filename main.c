@@ -1,19 +1,17 @@
-/** @file CANBusMonitor.c
- *  @brief An initial CANBusMonitor.c
- *
- *  This file contains the main()
- *  function.
- *
- *  @author John Fritz
- *  @bug Not Finished
- */
-
-/* TODO:: DONE 3_14_2016_9:00PM CST
- * Use #defines and #ifdef's to check for error logging functionality 
- * (currently implemented throughout main, can.c, and uart.c).
- * Think about separating these files into separate source and header
- * files that can be included and used with a simple #define in main.
- */
+//******************************************************************************
+//! @file $RCSfile: main.c,v $
+//!
+//! Please read file license.txt for copyright notice.
+//!
+//! @brief A CAN bus monitor
+//!
+//! This file can be parsed by Doxygen for automatic documentation generation.
+//!
+//! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
+//!
+//! @todo	Lots. Next up: implement CAN, after that implement ADC
+//! @bug
+//******************************************************************************
 
 /* -- Includes -- */
 #include "config.h"

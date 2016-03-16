@@ -1,24 +1,25 @@
-/** @file uart.c
- *  @brief A console driver.
- *
- *  These empty function definitions are provided
- *  so that stdio will build without complaining.
- *  You will need to fill these functions in. This
- *  is the implementation of the console driver.
- *  Important details about its implementation
- *  should go in these comments.
- *
- *  @author John Fritz
- *  @bug No known bugs.
- *
- *  LINDAT register is uart data register.
- *  LINCR register is lin/uart control register
- *  LINSIR register is LIN status and interrupt register
- *  LINENIR register is LIN enable interrupt register
- *  LINERR register is LIN error register
- *  LINBTR is LIN bit timing register
- *  LINBRR is lin baud rate register
- */
+//******************************************************************************
+//! @file $RCSfile: uart.c,v $
+//!
+//! Please read file license.txt for copyright notice.
+//!
+//! @brief This file contains the function definitions for uart.
+//!			- LINDAT register is uart data register.
+//!			- LINCR register is lin/uart control register
+//!			- LINSIR register is LIN status and interrupt register
+//!			- LINENIR register is LIN enable interrupt register
+//!			- LINERR register is LIN error register
+//!			- LINBTR is LIN bit timing register
+//!			- LINBRR is lin baud rate register
+//!
+//!
+//! This file can be parsed by Doxygen for automatic documentation generation.
+//!
+//! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
+//!
+//! @todo	Lots
+//! @bug
+//******************************************************************************
 #ifndef _UART_C
 #define _UART_C
 

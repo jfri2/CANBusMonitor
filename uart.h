@@ -1,18 +1,26 @@
-/** @file uart.h
- *  @brief Function prototypes for the uart driver.
- *
- *  This contains the prototypes for the uart
- *  driver and eventually any macros, constants,
- *  or global variables needed
- *
- *  @author John Fritz
- *  @bug No known bugs.
- */
+//******************************************************************************
+//! @file $RCSfile: uart.h,v $
+//!
+//! Please read file license.txt for copyright notice.
+//!
+//! @brief This file contains
+//!
+//! This file can be parsed by Doxygen for automatic documentation generation.
+//!
+//! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
+//!
+//! @todo	Lots
+//! @bug
+//******************************************************************************
 
 #ifndef _UART_H
 #define _UART_H
 
 #include <stdio.h>
+
+#ifndef UART_BAUD_RATE
+#warning "UART_BAUD_RATE not defined in config.h"
+#endif
 
 /** @brief Prints character ch at the current location
  *         of the cursor.

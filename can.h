@@ -1,14 +1,18 @@
-/** @file can.h
- *  @brief Function prototypes for the CAN driver.
- *
- *  This contains the prototypes for the CAN
- *  driver and eventually any macros, constants,
- *  or global variables you will need.
- *
- *  @author John Fritz
- *  @bug No known bugs.
- */
-
+//******************************************************************************
+//! @file $RCSfile: can.h,v $
+//!
+//! Please read file license.txt for copyright notice.
+//!
+//! @brief This file contains the prototypes for CAN and eventually any macros,
+//!			constants, and/or global variables.
+//!
+//! This file can be parsed by Doxygen for automatic documentation generation.
+//!
+//! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
+//!
+//! @todo	Lots
+//! @bug
+//******************************************************************************
 #ifndef _CAN_H
 #define _CAN_H
 
@@ -17,14 +21,18 @@
 	#error 'Define CPU clock frequency (F_CPU)'
 #elif (F_CPU == 8000000 || F_CPU == 8000000UL || F_CPU == 8000000L)
 #else
-	#pragma message("F_CPU not defined as 8 MHz, CAN baud rate may be incorrect")
+	#warning("F_CPU not defined as 8 MHz, CAN baud rate may be incorrect")
 #endif
 
 #ifndef CAN_BAUD_RATE_KHz
-	#error 'Define CAN baud rate'
+	#warning "CAN_BAUD_RATE_KHz not defined in config.h"
 #endif
 
-/* Function Prototypes */
+#ifndef CAN_TQ_NS
+	#warning "CAN_TQ_NS (Time Quantum) not defined in config.h"
+#endif
+	
+	/* Function Prototypes */
 
 /**
  
@@ -47,9 +55,32 @@
 				75%			1.250	8	3	2	2	1	0x12	0x04	0x13
  
  */
+//------------------------------------------------------------------------------
+//  @fn can_init
+//!
+//! This function 
+//!
+//! @warning none.
+//!
+//! @param none.
+//!
+//! @return none.
+//!
 uint8_t can_init(uint16_t, uint16_t);
 
-
+//------------------------------------------------------------------------------
+//  @fn can_init
+//!
+//! This function
+//!
+//! @warning none.
+//!
+//! @param none.
+//!
+//! @return none.
+//!
+#ifdef LOGGING_ACTIVE
 void checkCANInit(uint8_t);
+#endif
 
 #endif /* _CAN_H */

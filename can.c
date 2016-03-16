@@ -1,11 +1,17 @@
-/** @file can.c
- *  @brief A CAN driver.
- *
- *  comments go here
- *
- *  @author John Fritz
- *  @bug Not Finished
- */
+//******************************************************************************
+//! @file $RCSfile: can.c,v $
+//!
+//! Please read file license.txt for copyright notice.
+//!
+//! @brief This file contains
+//!
+//! This file can be parsed by Doxygen for automatic documentation generation.
+//!
+//! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
+//!
+//! @todo	Lots
+//! @bug
+//******************************************************************************
 
 #include "can.h"
 #include "event_logger.c"
@@ -24,8 +30,8 @@ uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 				/* tq_ns not correctly defined for 1M baud rate */
 				errorCode = 1;
 			}
-		break;				
-		
+		break;
+				
 		case 500:		// 500k baud rate
 			if(tq_ns == 125) {
 				CANBT1 = 0x00;
@@ -108,6 +114,7 @@ uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 	return(errorCode);
 }
 
+#ifdef LOGGING_ACTIVE
 void checkCANInit(uint8_t errorCode) {
 	switch(errorCode) {
 		case 0:
@@ -155,3 +162,4 @@ void checkCANInit(uint8_t errorCode) {
 		break;			
 	}
 }
+#endif
