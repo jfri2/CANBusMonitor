@@ -31,8 +31,8 @@
 #define STATUS_LED_REG			PORTC	// Status LED register
 #define TIMER0_PRESCALE			1		// Timer0 prescalar
 #define UART_BAUD_RATE			9600	// UART baud rate in Hz
-#define CAN_BAUD_RATE_KHz		100		// CAN baud rate in kHz
-#define CAN_TQ_NS				625		// CAN Time Quantum in nanoseconds. Smallest discrete timing resolution used by a CAN node
+#define CAN_BAUD_RATE_KHz		500		// CAN baud rate in kHz
+#define CAN_TQ_NS				125		// CAN Time Quantum in nanoseconds. Smallest discrete timing resolution used by a CAN node
 
 #include <stdint.h>
 #include <avr/io.h>
@@ -47,7 +47,7 @@
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-//  @fn can_init
+//  @fn system_init
 //!
 //! This function
 //!

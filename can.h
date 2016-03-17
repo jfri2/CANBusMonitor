@@ -30,6 +30,10 @@
 #define CAN_MOb_MSK_FORM_ERR	(1<<FERR)		// CAN Message Object CHecK MaSK FORM ERRor (CRC delimiter, ack delimiter, EOF)
 #define CAN_MOb_MSK_ACK_ERR		(1<<AERR)		// CAN Message Object CHecK MaSK ACKnowledgment ERRor
 
+/* CAN_MOb_CONFIG_Reg Configuration Options */
+#define MOb_OPMode		0	// Message Object OPerating Mode (Position 0 in configuration register)
+#define MOb_
+
 //------------------------------------------------------------------------------
 /* Macros */
 //------------------------------------------------------------------------------
@@ -49,13 +53,39 @@
 #endif
 
 /* CANGCON CAN General CONtrol register macros */
-#define CAN_RESET()		CANGCON = (1<<SWRES)							// CAN only software reset
-#define CAN_ENABLE()	CANGCON |= (1<< ENASTB)							// CAN enable
-#define CAN_DISABLE()	CANGCON &= ~(1<<ENASTB)							// CAN standby
-#define CAN_ABORT()		CANGCON |= (1<<ABRQ); CANGCON &= ~(1<<ABRQ)		// CAN abort (toggle abort request)
-#define CAN_SEND_OVRLD()	CANGCON |= (1<<OVRQ)						// CAN send OVeRLoaD frame (traced in CANGSTA reg, bit OVFG)
+#define CAN_RESET()			CANGCON = (1<<SWRES)								// CAN only software reset
+#define CAN_ENABLE()		SET_BIT(ENASTB, CANGCON)							// CAN enable
+#define CAN_DISABLE()		CLR_BIT(ENASTB, CANGCON)							// CAN standby
+#define CAN_ABORT()			SET_BIT(ABRQ, CANGCON); CLR_BIT(ABRQ, CANGCON)		// CAN abort (toggle abort request)
+#define CAN_SEND_OVRLD()	SET_BIT(OVRQ, CANGCON)								// CAN send OVeRLoaD frame (traced in CANGSTA reg, bit OVFG)
 
-/* CAN
+/* CANGSTA CAN General STAtus register macros */
+#define CAN_CHK_TX_BSY()		CHK_BIT(TXBSY, CANGSTA)		// Return 0 if TX free, return 0b00010000 if busy
+#define CAN_CHK_RX_BSY()		CHK_BIT(RXBSY, CANGSTA)		// Return 0 if RX free, return 0b00001000 if busy
+#define CAN_CHK_OVLD()			CHK_BIT(6, CANGSTA)			// Return 0 if no overload frame, return 0b01000000 if overload frame sent
+#define CAN_CHK_EN()			CHK_BIT(ENFG, CANGSTA)		// Return 0 if CAN controller disabled, 0b00000100 if enabled
+#define CAN_CHK_BUS()			CHK_BIT(BOFF, CANGSTA)		// Return 0 if no bus off mode, 0b00000010 if bus off mode
+#define CAN_CHK_ERR_PASS()		CHK_BIT(ERRP, CANGSTA)		// Return 0 if no error passive mode, 1 if error passive mode
+
+/* CAN Error Counter Check and Reset macros */
+#define CAN_CHK_RX_ERR_CNT()	CANREC			// CAN CHecK Receive ERRor CouNTer
+#define CAN_RST_RX_ERR_CNT()	CANREC = 0x00	// CAN ReSeT Receive ERRor CouNTer
+#define CAN_CHK_TX_ERR_CNT()	CANTEC			// CAN CHecK Transmit ERRor CouNTer
+#define CAN_RST_TX_ERR_CNT()	CANTEC = 0x00	// CAN ReSeT Transmit ERRor CouNTer
+
+/* CAN Check MOb macros */
+#define CAN_CHK_MOb_0()		CHK_BIT(ENMOB0, CANEN2)		// Returns 0 if MOb is available for new Tx or Rx, 0b00000001 if busy
+#define CAN_CHK_MOb_1()		CHK_BIT(ENMOB1, CANEN2)		// Returns 1 if MOb is available for new Tx or Rx, 0b00000010 if busy
+#define CAN_CHK_MOb_2()		CHK_BIT(ENMOB2, CANEN2)		// Returns 2 if MOb is available for new Tx or Rx, 0b00000100 if busy
+#define CAN_CHK_MOb_3()		CHK_BIT(ENMOB3, CANEN2)		// Returns 3 if MOb is available for new Tx or Rx, 0b00001000 if busy
+#define CAN_CHK_MOb_4()		CHK_BIT(ENMOB4, CANEN2)		// Returns 4 if MOb is available for new Tx or Rx, 0b00010000 if busy
+#define CAN_CHK_MOb_5()		CHK_BIT(ENMOB5, CANEN2)		// Returns 5 if MOb is available for new Tx or Rx, 0b00100000 if busy
+
+
+//------------------------------------------------------------------------------
+/* Global Variables */
+//------------------------------------------------------------------------------
+uint8_t CAN_MOb_CONFIG_Reg = 0x00;				// Message Object CONFIGuration Register
 
 //------------------------------------------------------------------------------
 /* Function Prototypes */

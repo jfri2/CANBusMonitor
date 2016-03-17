@@ -68,7 +68,7 @@
 //!
 //! @return none.
 //!
-#define CHK_BIT(bit, reg)	reg = ((reg >> bit) & 1)
+#define CHK_BIT(bit, reg)	((reg >> bit) & 1)
 
 //------------------------------------------------------------------------------
 //  @fn can_init

@@ -24,12 +24,13 @@
 #include "timer.h"
 #include "gpio.h"
 
-#if TIMER0_PRESCALE == 1
+
 void timer0_init(void) {
+#if TIMER0_PRESCALE == 1
 	/* Set Prescalar to clk/1 */
 	SET_BIT(CS00,TCCR0B);
 	
 	/* Enable Overflow Interrupt */
 	SET_BIT(TOIE0, TIMSK0);
+#endif	
 }
-#endif

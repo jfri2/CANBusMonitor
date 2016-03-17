@@ -16,16 +16,19 @@
 #include "event_logger.h"
 #include "uart.c"
 
-#ifdef LOGGING_ACTIVE
+
 void logEvent(char *str) {
+#ifdef LOGGING_ACTIVE	
 	//uartSendByte(13); //ascii carrige return
 	printf("\n%03u %02u:%02u:%02u  ", systemTime.days, systemTime.hours, systemTime.minutes, systemTime.seconds);
 	printf(str);
+#endif	
 }
-#endif
 
-#ifdef SYSTEM_TIME_ON_TIMER0
+
+
 ISR(TIMER0_OVF_vect) {
+#ifdef SYSTEM_TIME_ON_TIMER0	
 	#ifdef STATUS_LED_ACTIVE
 	/* Update LED Flash Counter */
 	LEDBlinkCount++;
@@ -51,7 +54,9 @@ ISR(TIMER0_OVF_vect) {
 			}
 		}
 	}
-}
 #else
-#pragma message("System time on timer0 not active")
-#endif
+#pragma message("System time on timer0 not active")	
+#endif	
+}
+
+

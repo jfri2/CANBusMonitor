@@ -115,8 +115,8 @@ uint8_t can_SetFixedBaudRate(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 	return(errorCode);
 }
 
-#ifdef LOGGING_ACTIVE
 void can_CheckBaudRateError(uint8_t errorCode) {
+#ifdef LOGGING_ACTIVE	
 	switch(errorCode) {
 		case 0:
 			logEvent("CAN baud initialized");
@@ -162,8 +162,8 @@ void can_CheckBaudRateError(uint8_t errorCode) {
 			logEvent("ERROR: Unknown CAN initialization error.");
 		break;			
 	}
+#endif	
 }
-#endif
 
 uint8_t can_ConfigureChannel(uint8_t mode, uint8_t errorState) {
 	// TODO
@@ -221,10 +221,10 @@ uint8_t can_ConfigureChannel(uint8_t mode, uint8_t errorState) {
 	return(returnError);
 }
 
-uint8_t can_ConfigureMob(uint8_t MOb_Number, uint8_t ) {
+uint8_t can_ConfigureMob(uint8_t CAN_MOb_CONFIG_Reg) {
 	uint8_t errorFlag = 0;
-	switch (MOb_Number) {
-		case 0:
+	switch (CAN_MOb_CONFIG_Reg) {
+
 	}
 	return(errorFlag);
 }
