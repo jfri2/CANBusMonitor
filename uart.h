@@ -24,14 +24,14 @@
 
 void uart_init(uint16_t);
 
-uint8_t checkUartErrorRegister(void);
+uint8_t uart_checkErrorRegister(void);
 
-void uartSendByte(uint8_t);
+void uart_SendByte(uint8_t);
 
-uint8_t uartGetByte(void);
+uint8_t uart_GetByte(void);
 
-void uartSendByteStream(uint8_t, FILE *stream);
+void uart_SendByteStream(uint8_t, FILE *stream);
 
-uint8_t uartGetByteStream(FILE *stream);
+uint8_t uart_GetByteStream(FILE *stream);
 
 #endif /* _UART_H */

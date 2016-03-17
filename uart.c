@@ -26,7 +26,7 @@
 #include "uart.h"
 #include "gpio.c"
 
-static FILE avrStdOut = FDEV_SETUP_STREAM(uartSendByteStream, uartGetByteStream, _FDEV_SETUP_RW);
+static FILE avrStdOut = FDEV_SETUP_STREAM(uart_SendByteStream, uart_GetByteStream, _FDEV_SETUP_RW);
 
 void uart_init(uint16_t baudRate) {
 	/* set uart no parity, 8 data bits, 1 stop bit */
@@ -47,7 +47,7 @@ void uart_init(uint16_t baudRate) {
 	stdin = &avrStdOut;		//define input stream
 }
 
-uint8_t checkUartErrorRegister(void) {
+uint8_t uart_checkErrorRegister(void) {
 	/* Bitmask error register to get specific error
 	 * 
 	 * No errors: returns 0
@@ -63,22 +63,22 @@ uint8_t checkUartErrorRegister(void) {
 	return LINERR;
 }
 
-void uartSendByte(uint8_t data) {
+void uart_SendByte(uint8_t data) {
 	while((LINSIR & (1<<LBUSY)) != 0);	// wait until uart is not busy
 	LINDAT = data;	// put data into register to be sent out
 }
 
-uint8_t uartGetByte(void) {
+uint8_t uart_GetByte(void) {
 	while((LINSIR & (1<<LBUSY)) != 0);	// wait until uart is not busy
 	return(LINDAT);	// return data from LINDAT register
 }
 
-void uartSendByteStream(uint8_t data, FILE *stream) {
+void uart_SendByteStream(uint8_t data, FILE *stream) {
 	while((LINSIR & (1<<LBUSY)) != 0);	// wait until uart is not busy
 	LINDAT = data;	// put data into register to be sent out
 }
 
-uint8_t uartGetByteStream(FILE *stream) {
+uint8_t uart_GetByteStream(FILE *stream) {
 	while((LINSIR & (1<<LBUSY)) != 0);	// wait until uart is not busy
 	return(LINDAT);	// return data from LINDAT register	s
 }

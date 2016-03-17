@@ -16,26 +16,52 @@
 #ifndef _CAN_H
 #define _CAN_H
 
-/* Baud Rate Settings Check*/
+//------------------------------------------------------------------------------
+/* Definitions */
+//------------------------------------------------------------------------------
+
+/* CANSTMOB CAN MOB STatus register masks */
+#define CAN_MOb_MSK_DLC_ERR		(1<<DLCW)		// CAN Message Object CHecK MaSK Data Length Code ERRor (warning, not error)
+#define CAN_MOb_MSK_TX_ERR		(1<<TXOK)		// CAN Message Object CHecK MaSK Transmit ERRor
+#define CAN_MOb_MSK_RX_ERR		(1<<RXOK)		// CAN Message Object CHecK MaSK Receive ERRor
+#define CAN_MOb_MSK_BIT_ERR		(1<<BERR)		// CAN Message Object CHecK MaSK BIT ERRor (only in transmission)
+#define CAN_MOb_MSK_BSTF_ERR	(1<<SERR)		// CAN Message Object CHecK MaSK Bit STuFfing ERRor
+#define CAN_MOb_MSK_CRC_ERR		(1<<CERR)		// CAN Message Object CHecK MaSK Cyclic Redundancy Check ERRor
+#define CAN_MOb_MSK_FORM_ERR	(1<<FERR)		// CAN Message Object CHecK MaSK FORM ERRor (CRC delimiter, ack delimiter, EOF)
+#define CAN_MOb_MSK_ACK_ERR		(1<<AERR)		// CAN Message Object CHecK MaSK ACKnowledgment ERRor
+
+//------------------------------------------------------------------------------
+/* Macros */
+//------------------------------------------------------------------------------
+
+/* Baud Rate Settings Checks*/
 #ifndef F_CPU
-	#error 'Define CPU clock frequency (F_CPU)'
+#	error 'Define CPU clock frequency (F_CPU)'
 #elif (F_CPU == 8000000 || F_CPU == 8000000UL || F_CPU == 8000000L)
 #else
-	#warning("F_CPU not defined as 8 MHz, CAN baud rate may be incorrect")
+#	warning("F_CPU not defined as 8 MHz, CAN baud rate may be incorrect")
 #endif
-
 #ifndef CAN_BAUD_RATE_KHz
-	#warning "CAN_BAUD_RATE_KHz not defined in config.h"
+#	warning "CAN_BAUD_RATE_KHz not defined in config.h"
 #endif
-
 #ifndef CAN_TQ_NS
-	#warning "CAN_TQ_NS (Time Quantum) not defined in config.h"
+#	warning "CAN_TQ_NS (Time Quantum) not defined in config.h"
 #endif
-	
-	/* Function Prototypes */
 
-/**
- 
+/* CANGCON CAN General CONtrol register macros */
+#define CAN_RESET()		CANGCON = (1<<SWRES)							// CAN only software reset
+#define CAN_ENABLE()	CANGCON |= (1<< ENASTB)							// CAN enable
+#define CAN_DISABLE()	CANGCON &= ~(1<<ENASTB)							// CAN standby
+#define CAN_ABORT()		CANGCON |= (1<<ABRQ); CANGCON &= ~(1<<ABRQ)		// CAN abort (toggle abort request)
+#define CAN_SEND_OVRLD()	CANGCON |= (1<<OVRQ)						// CAN send OVeRLoaD frame (traced in CANGSTA reg, bit OVFG)
+
+/* CAN
+
+//------------------------------------------------------------------------------
+/* Function Prototypes */
+//------------------------------------------------------------------------------
+
+/** 
 	8.000 MHz Clock CAN baud rate settings
 	(From Table 19-2 in ATmega16M1/32M1/64M1 Datasheet)
 	
@@ -56,7 +82,7 @@
  
  */
 //------------------------------------------------------------------------------
-//  @fn can_init
+//  @fn can_SetFixedBaudRate
 //!
 //! This function 
 //!
@@ -66,10 +92,10 @@
 //!
 //! @return none.
 //!
-uint8_t can_init(uint16_t, uint16_t);
+uint8_t can_SetFixedBaudRate(uint16_t, uint16_t);
 
 //------------------------------------------------------------------------------
-//  @fn can_init
+//  @fn can_CheckBaudRateErrors
 //!
 //! This function
 //!
@@ -80,7 +106,56 @@ uint8_t can_init(uint16_t, uint16_t);
 //! @return none.
 //!
 #ifdef LOGGING_ACTIVE
-void checkCANInit(uint8_t);
+void can_CheckBaudRateError(uint8_t);
 #endif
+
+//------------------------------------------------------------------------------
+//  @fn can_ConfigureChannel
+//!
+//! This function
+//!
+//! @warning none.
+//!
+//! @param	mode
+//!				==0: Enabled mode
+//!				==1: Standby mode
+//!				==2: Listening mode
+//!			errorState
+//!				==0: Error active (default)
+//!				==1: Error passive
+//!				==2: Bus Off
+//!
+//! @return errorFlag
+//!				==0: No errors
+//!				==1: Invalid mode parameter
+//!				==2: Invalid errorState parameter
+//!				==3: Invalid mode and errorState parameters
+//!
+uint8_t can_ConfigureChannel(uint8_t, uint8_t);
+
+//------------------------------------------------------------------------------
+//  @fn can_ConfigureMOb
+//!
+//! This function
+//!
+//! @warning none.
+//!
+//! @param	MOb_Number
+//!				==0: MOb0
+//!				==1: MOb1
+//!				==2: MOb2
+//!				==3: MOb3
+//!				==4: MOb4
+//!				==5: MOb5
+//!			errorState
+//!				==0: Error active (default)
+//!				==1: Error passive
+//!				==2: Bus Off
+//!
+//! @return errorFlag
+//!				==0: No errors
+//!				==1: Invalid MOb number
+//!
+uint8_t can_ConfigureMOb(uint8_t);
 
 #endif /* _CAN_H */

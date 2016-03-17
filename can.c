@@ -9,16 +9,17 @@
 //!
 //! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
 //!
-//! @todo	Add function def doc, more other doc, add more fns if necessary
+//! @todo	Add function def doc, more other doc, add more fns if necessary, define current functions
 //! @bug
 //******************************************************************************
 
 #include "can.h"
 #include "event_logger.c"
 
-uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
+
+uint8_t can_SetFixedBaudRate(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 	uint8_t errorCode = 0;	
-	
+	//CAN_RESET();
 	switch(CANBaudRate_kHz) {		
 		case 1000:		// 1M baud rate
 			if(tq_ns == 125) {
@@ -30,7 +31,7 @@ uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 				/* tq_ns not correctly defined for 1M baud rate */
 				errorCode = 1;
 			}
-		break;
+			break;
 				
 		case 500:		// 500k baud rate
 			if(tq_ns == 125) {
@@ -45,7 +46,7 @@ uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 				/* tq_ns not correctly defined for 500k baud rate */
 				errorCode = 2;
 			}
-		break;		
+			break;		
 		
 		case 250:		// 250k baud rate
 			if(tq_ns == 250) {
@@ -60,7 +61,7 @@ uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 				/* tq_ns not correctly defined for 250k baud rate */
 				errorCode = 3;
 			}
-		break;		
+			break;		
 		
 		case 200:		// 200k baud rate
 			if(tq_ns == 250) {
@@ -75,7 +76,7 @@ uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 				/* tq_ns not correctly defined for 200k baud rate */
 				errorCode = 4;
 			}
-		break;		
+			break;		
 		
 		case 125:		// 125k baud rate
 			if(tq_ns == 500) {
@@ -90,7 +91,7 @@ uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 				/* tq_ns not correctly defined for 125k baud rate */
 				errorCode = 5;
 			}
-		break;		
+			break;		
 		
 		case 100:		// 100k baud rate
 			if(tq_ns == 625) {
@@ -105,20 +106,20 @@ uint8_t can_init(uint16_t CANBaudRate_kHz, uint16_t tq_ns) {
 				/* tq_ns not correctly defined for 100k baud rate */
 				errorCode = 6;
 			}
-		break;	
+			break;	
 			
 		default:
 			errorCode = 0xFF;
-		break;		
+			break;		
 	}
 	return(errorCode);
 }
 
 #ifdef LOGGING_ACTIVE
-void checkCANInit(uint8_t errorCode) {
+void can_CheckBaudRateError(uint8_t errorCode) {
 	switch(errorCode) {
 		case 0:
-			logEvent("CAN initialized");
+			logEvent("CAN baud initialized");
 			printf(" to %u kHz baud, TQ of %u nsec", CAN_BAUD_RATE_KHz, CAN_TQ_NS);
 		break;
 		
@@ -163,3 +164,68 @@ void checkCANInit(uint8_t errorCode) {
 	}
 }
 #endif
+
+uint8_t can_ConfigureChannel(uint8_t mode, uint8_t errorState) {
+	// TODO
+	uint8_t returnError = 0;
+	switch(mode) {
+		case 0:
+			// Enabled Mode
+			// CAN Channel (TxCAN and RxCAN) enabled
+			// Input clock enabled
+			break;
+		
+		case 1:
+			// Standby Mode
+			// Tx provides recessive level and Rx disabled
+			// Input clock enabled
+			// Registers and pages remain accessible
+			break;
+		
+		case 2:
+			// Listening Mode
+			// Enables hardware loopback. Internal TxCAN connected to internal RxCAN
+			// Provides recessive level on TxCAN output pin
+			// Does not disable RxCAN input pin
+			// Freezes TEC and REC error counters
+			break;
+		
+		default:
+			// Error scenario, increment returnError
+			returnError++;
+			break;
+	}
+	switch(errorState) {
+		case 0:
+			// Error active
+			// CAN channel takes part in bus comms and can send active error frame when
+			// CAN macro detects and error
+			break;
+		
+		case 1:
+			// Error passive
+			// CAN channel cannot send active error frame, but takes part in bus comms
+			// When error is detected, passive error frame sent. After a Tx an error 
+			// passive unit will wait before initiating further transmission
+			break;
+			
+		case 2:
+			// Bus off
+			// CAN channel is not allowed to have any influence on the bus
+			break;
+		
+		default:
+			returnError = returnError + 2;
+			break;
+	}	
+	return(returnError);
+}
+
+uint8_t can_ConfigureMob(uint8_t MOb_Number, uint8_t ) {
+	uint8_t errorFlag = 0;
+	switch (MOb_Number) {
+		case 0:
+	}
+	return(errorFlag);
+}
+

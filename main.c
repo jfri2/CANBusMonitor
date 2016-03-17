@@ -31,7 +31,7 @@ int main(void) {
 	system_init();
 	sei();
 	logEvent("Beginning CAN initialization...");
-	checkCANInit(can_init(CAN_BAUD_RATE_KHz, CAN_TQ_NS));
+	can_CheckBaudRateError(can_SetFixedBaudRate(CAN_BAUD_RATE_KHz, CAN_TQ_NS));
 	
 	/************** System Loop **************/	
     while(1) {				
