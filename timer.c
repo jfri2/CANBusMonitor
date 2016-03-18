@@ -26,11 +26,29 @@
 
 
 void timer0_init(void) {
+#ifdef TIMER0_PRESCALE	
 #if TIMER0_PRESCALE == 1
 	/* Set Prescalar to clk/1 */
 	SET_BIT(CS00,TCCR0B);
 	
 	/* Enable Overflow Interrupt */
 	SET_BIT(TOIE0, TIMSK0);
+#endif
 #endif	
+}
+
+void timer1_init(void) {
+#ifdef TIMER1_PRESCALE	
+#if TIMER1_PRESCALE == 1
+	/* Set Prescalar to clk/8 */
+	TCCR1B |= (1<<CS11)
+	
+	/* Set top of timer1 to 1ms match */
+	OCR1A = 1000;
+	
+	/* Enable Interrupts on match*/
+	TIMSK1 |= (1<<ICIE1)|(1<<OCIE1A);
+
+#endif	
+#endif
 }

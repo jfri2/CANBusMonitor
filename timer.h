@@ -14,13 +14,23 @@
 //! @bug
 //******************************************************************************
 
-#ifndef _TIMER_H
-#define _TIMER_H
+#ifndef _TIMER_H_
+#define _TIMER_H_
 
+#ifdef TIMER0_ACTIVE
 #ifndef TIMER0_PRESCALE
 #warning "Define TIMER0_PRESCALE in config.h"
 #elif TIMER0_PRESCALE != 1
-#warning "Timer0 Prescalar value not supported. Change prescale value to 1"
+#warning "Timer0 Prescalar value not supported. Change prescale value to 1 in config.h"
+#endif
+#endif
+
+#ifdef TIMER1_ACTIVE
+#ifndef TIMER1_PRESCALE
+#warning "Define TIMER1_PRESCALE in config.h"
+#elif TIMER1_PRESCALE != 8
+#warning "Timer1 Prescalar value not supported. Change prescale value to 8 in config.h"
+#endif
 #endif
 
 //------------------------------------------------------------------------------
@@ -36,4 +46,17 @@
 //!
 void timer0_init(void);
 
-#endif
+//------------------------------------------------------------------------------
+//  @fn timer1_init
+//!
+//! This function
+//!
+//! @warning none.
+//!
+//! @param none.
+//!
+//! @return none.
+//!
+void timer1_init(void);
+
+#endif 

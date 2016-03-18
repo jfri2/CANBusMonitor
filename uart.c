@@ -20,8 +20,8 @@
 //! @todo	Add function def doc, more other doc, add more fns if necessary
 //! @bug
 //******************************************************************************
-#ifndef _UART_C
-#define _UART_C
+#ifndef _UART_C_
+#define _UART_C_
 
 #include "uart.h"
 #include "gpio.c"

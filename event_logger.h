@@ -14,8 +14,8 @@
 //! @bug
 //******************************************************************************
 
-#ifndef _EVENT_LOGGER_H
-#define _EVENT_LOGGER_H
+#ifndef _EVENT_LOGGER_H_
+#define _EVENT_LOGGER_H_
 
 #ifndef LOGGING_ACTIVE
 #warning ("Logging is not active. Define LOGGING_ACTIVE in config.h")
@@ -24,6 +24,7 @@
 /* Structs */
 typedef struct {
 	uint16_t counter;
+	uint16_t milliseconds;
 	uint8_t seconds;
 	uint8_t minutes;
 	uint8_t hours;
@@ -48,6 +49,6 @@ timeStruct systemTime;
 //!
 //! @return none.
 //!
-void logEvent(char *);
+void logEvent(char *str);
 
 #endif

@@ -13,8 +13,8 @@
 //! @bug
 //******************************************************************************
 
-#ifndef _UART_H
-#define _UART_H
+#ifndef _UART_H_
+#define _UART_H_
 
 #include <stdio.h>
 
