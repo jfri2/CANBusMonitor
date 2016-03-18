@@ -19,7 +19,10 @@
 #include "gpio.h"
 
 void gpio_init(void) {
-  DDRC = 0xFF;
-  PORTC = 0x00;
+	DDRB = 0xFF; //Parallel outputs for LCD Display
+	DDRC = 0b00000111;
+	DDRD = 0b11111011;	
+	SET_BIT(STATUS_LED, DDRC);
+	//PORTC = 0x00;
 }
 #endif

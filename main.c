@@ -17,16 +17,22 @@
 #include "config.h"
 
 #define DATA_BUFFER_SIZE 8
-#define MY_ID 0x11
-#define MY_DATA_POS_0 0x79
+#define MY_CAN_ID 0x012
+#define ABORT_ACTIVE
 
 /* -- Global Variables -- */
 uint8_t adcVoltage = 0;
 uint8_t canInitFlag;
 
+uint16_t countTilAbort = 0;
+uint16_t abortCountThreshold = 5000;
+uint8_t abortFlag = 0;
+
 uint8_t c_status;
 uint8_t canDataBuffer[DATA_BUFFER_SIZE];
 st_cmd_t message;
+
+timeStruct oldSystemTime;
 
 /* -- ISRs -- */
 /* Timer0 overflow ISR now defined in event_logger.h */
@@ -46,26 +52,48 @@ int main(void) {
 		
 		
 	/************** System Loop **************/	
-    while(1) {	
+    while(1) {			
 		
-		canDataBuffer[0] = MY_ID;
-		canDataBuffer[1] = MY_DATA_POS_0;
-		
-		message.pt_data = &canDataBuffer[0];
-		message.ctrl.ide = 0;
-		message.dlc = DATA_BUFFER_SIZE;	// bytes of data being sent
-		message.id.std = MY_ID;
-		message.cmd = CMD_REPLY_MASKED;		// assigned as standard 2.0A reply message object
-		
-		
-		logEvent("Waiting for MOb to configure...");
-		while(can_cmd(&message) != CAN_CMD_ACCEPTED);	// wait for MOb to configure
-		logEvent("MOb configured. Waiting for Tx request...");
-		while(can_get_status(&message) == CAN_STATUS_NOT_COMPLETED);	// wait for Tx request to come in, then send response
-		logEvent("Tx request received, data sent: ");
-		printf("%u", canDataBuffer[1]);
-		
-		/* blink the LED on PORTC7 once per second */
+		if(abortFlag == 0) {
+			message.pt_data = &canDataBuffer[0];	
+			message.dlc = DATA_BUFFER_SIZE;
+			message.ctrl.ide = 0;
+			message.id.std = MY_CAN_ID;
+			message.cmd = CMD_REPLY_MASKED;
+			
+			if(can_cmd(&message) == CAN_CMD_REFUSED) {
+				logEvent("CAN_CMD_REFUSED");
+				#ifdef ABORT_ACTIVE
+				countTilAbort++;
+				if(countTilAbort > abortCountThreshold) {
+					/* abort message, try again later */
+					abortFlag = 0x01;
+					logEvent("CAN ABORT");
+					message.cmd = CMD_ABORT;
+					can_cmd(&message);
+				}
+				#endif
+			} else {
+				c_status = can_get_status(&message);
+				switch (c_status) {
+					case CAN_STATUS_COMPLETED:
+						logEvent("CAN_STATUS_COMPLETED");
+						break;
+					case CAN_STATUS_NOT_COMPLETED:
+						logEvent("CAN_STATUS_NOT_COMPLETED");
+						break;
+					case CAN_STATUS_ERROR:
+						logEvent("CAN_STATUS_ERROR");
+						break;	
+					default:
+						logEvent("Unknown Error, can_get_status returned: ");
+						printf("%u", c_status);
+						break;
+				}
+			}
+			
+		}				
+		/* blink the LED on PORTC7 once per second */		
 		#ifdef STATUS_LED_ACTIVE
 			#ifdef SYSTEM_TIME_ON_TIMER0
 				if(LEDBlinkCount >= LED_DELAY_OVF_TIMER0) {
@@ -84,6 +112,7 @@ int main(void) {
 }
 
 void system_init(void) {
+	//PRR = 0x00;   // Individual peripheral clocks enabled
 	/* initialize system time to zero */
 	systemTime.counter = 0;
 	systemTime.milliseconds = 0;
@@ -97,4 +126,3 @@ void system_init(void) {
 	printf("\n=============== CAN BUS MONITOR ===============");
 	printf("\n===============================================");
 }
-
