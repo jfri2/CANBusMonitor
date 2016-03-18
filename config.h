@@ -33,10 +33,10 @@
 #define STATUS_LED_REG			PORTC	// Status LED register
 #define TIMER1_PRESCALE			8		// Timer1 prescalar
 #define TIMER1_ACTIVE
-#define UART_BAUD_RATE			9600	// UART baud rate in Hz
+#define UART_BAUD_RATE			19200	// UART baud rate in Hz
 #define CAN_BAUDRATE			500		// CAN baud rate in kHz
 //#define CAN_TQ_NS				125		// CAN Time Quantum in nanoseconds. Smallest discrete timing resolution used by a CAN node
-#define LED_DELAY_OVF_TIMER1	5000
+#define LED_DELAY_TIMER1		500
 
 //! Some useful macros...
 // Max(a, b): Take the max between a and b

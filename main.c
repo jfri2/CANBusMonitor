@@ -9,7 +9,7 @@
 //!
 //! @version $Revision: 0.00 $ $Name: John Fritz (jfri2) $
 //!
-//! @todo	Lots. Next up: implement CAN, after that implement ADC
+//! @todo	Lots. ADC, CAN, merge event_logger and timer files
 //! @bug
 //******************************************************************************
 
@@ -34,7 +34,7 @@ st_cmd_t message;
 /* -- main -- */
 int main(void) {			
     /********** System Initilization **********/
-	timer0_init();
+	timer1_init();
     gpio_init();	
 	uart_init(UART_BAUD_RATE);
 	system_init();
@@ -43,9 +43,7 @@ int main(void) {
 	canInitFlag = can_init(0);
 	logEvent("System initialized can_init returned ");
 	printf("%u", canInitFlag);
-	
-	
-	
+		
 		
 	/************** System Loop **************/	
     while(1) {	
@@ -59,6 +57,7 @@ int main(void) {
 		message.id.std = MY_ID;
 		message.cmd = CMD_REPLY_MASKED;		// assigned as standard 2.0A reply message object
 		
+		
 		logEvent("Waiting for MOb to configure...");
 		while(can_cmd(&message) != CAN_CMD_ACCEPTED);	// wait for MOb to configure
 		logEvent("MOb configured. Waiting for Tx request...");
@@ -68,18 +67,18 @@ int main(void) {
 		
 		/* blink the LED on PORTC7 once per second */
 		#ifdef STATUS_LED_ACTIVE
-		#ifdef SYSTEM_TIME_ON_TIMER0
-		if(LEDBlinkCount >= LED_DELAY_OVF_TIMER0) {
-			LEDBlinkCount = 0;
-			TGL_BIT(STATUS_LED, STATUS_LED_REG);
-		}
-		#elsif defined(SYSTEM_TIME_ON_TIMER1)
-		if(LEDBlinkCount >= LED_DELAY_OVF_TIMER1) {
-			LEDBlinkCount = 0;
-			TGL_BIT(STATUS_LED, STATUS_LED_REG);
-		}
+			#ifdef SYSTEM_TIME_ON_TIMER0
+				if(LEDBlinkCount >= LED_DELAY_OVF_TIMER0) {
+					LEDBlinkCount = 0;
+					TGL_BIT(STATUS_LED, STATUS_LED_REG);
+				}
+			#elif defined(SYSTEM_TIME_ON_TIMER1)
+				if(LEDBlinkCount >= LED_DELAY_TIMER1) {
+					LEDBlinkCount = 0;
+					TGL_BIT(STATUS_LED, STATUS_LED_REG);
+				}
+			#endif
 		#endif		
-		#endif
 	}
     return 0;
 }
